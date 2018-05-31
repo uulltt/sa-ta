@@ -119,7 +119,7 @@ client.on('message', message => {
 		}
 	}
 	if (message.content.startsWith("!help")){
-		message.channel.send("!ready - add yourself to \"Looking for Game\"\n!unready - remove yourself from \"Looking for Game\"\n!stats L<number> - get stats for Wonder Wickets Level\n!statsC<number> - get stats for Wonder Wickets Challengoid");
+		message.channel.send("!ready - add yourself to \"Looking for Game\"\n!unready - remove yourself from \"Looking for Game\"\n!stats L<number> - get stats for Wonder Wickets Level\n!stats C<number> - get stats for Wonder Wickets Challengoid");
 	}
 	if (message.content.startsWith("!stats ")){
 		var level = message.content.substring(7);
