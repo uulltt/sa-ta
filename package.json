@@ -1,6 +1,6 @@
 {
-  "name": "cop4331group9",
-  "description": "queries",
+  "name": "sata",
+  "description": "for rightstick",
   "version": "1.0.0",
   "main": "bot.js",
   "scripts": {
