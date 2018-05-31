@@ -4,7 +4,6 @@ const client = new Discord.Client();
 
 client.on('ready', () => {
 	console.log('I am ready!');
-	herokupg.connect();
 	client.user.setUsername("SA-TA");
 	client.user.setActivity('type !help for commands', {
 		type: 'WATCHING'
