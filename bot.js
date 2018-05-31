@@ -254,6 +254,7 @@ client.on('message', message => {
 			});
 		}
 	}
+	}
 		
 });
 
