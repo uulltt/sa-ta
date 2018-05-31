@@ -118,7 +118,7 @@ client.on('message', message => {
 			message.channel.send("Error. There is no \"Looking for Game\" role.");
 		}
 	}
-	if (message.content.startsWith("!test"){
+	if (message.content.startsWith("!test")){
 		console.log(message.content);
 	}
 	if (message.content.startsWith("!help")){
