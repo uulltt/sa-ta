@@ -194,7 +194,7 @@ client.on('message', message => {
 			require("request").get("http://rightstickstudios.com/wickets/api/v1/stats.php?id=" + cContent, (error, result, body)=> {
 				let cData = JSON.parse(body);
 				if (cData.status == "success") {
-					let cEmbed = new Discord.RichEmbed().setTitle("Stats for " + (cContent[0] == "L" ? ln[cContent.substring(1)] : (cContent[0] == "C" ? ch[cContent.substring(1)] : "a Workshop Level")));
+					let cEmbed = new Discord.RichEmbed().setTitle("Stats for " + (cContent[0] == "L" ? ln[cContent.substring(1)] : (cContent[0] == "C" ? ch[cContent.substring(1)] : "A Workshop Level")));
 					for (cKey in cData.data) {
 						cEmbed.addField(rt[cKey].Emoji + " " + rt[cKey].Text, "**" + cData.data[cKey] + "** " + rt[cKey].Type);
 					}
@@ -205,6 +205,31 @@ client.on('message', message => {
 			});
 		} else {
 			// User
+			if (cContent.includes(" L") || cContent.includes(" C") || cContent.includes(" W")){
+				var level = cContent.substring(cContent.indexOf(" ") + 1);
+				require("request").get("http://rightstickstudios.com/wickets/api/v1/stats.php?uid=" + cContent.substring(0, cContent.indexOf(" ")) + "&id=" + level, (error, result, body)=> {
+				let cData = JSON.parse(body);
+				if (cData.status == "success") {
+					let cEmbed = new Discord.RichEmbed().setTitle("Stats for User on " + (cContent[0] == "L" ? ln[cContent.substring(1)] : (cContent[0] == "C" ? ch[cContent.substring(1)] : "A Workshop Level"))), cPlayer = new oPlayer();
+					// Count Stats
+					for (cKey in cData.data) {
+						var i = 0;
+						for (cType in cPlayer) {
+							cPlayer[cType] += (cData.data[cKey] >> i++) & 1;
+						}
+					}
+
+					// Display Stats
+					for (cKey in cPlayer) {
+						cEmbed.addField(rt[cKey].Emoji + " " + rt[cKey].Text, "**" + cPlayer[cKey] + "** " + rt[cKey].Alternate);
+					}
+
+					message.channel.send(cEmbed);
+				} else {
+					message.channel.send("**Error**: Could not find data for specified Steam ID (*" + cContent + "*)");
+				}
+			});
+			} else {
 			require("request").get("http://rightstickstudios.com/wickets/api/v1/stats.php?uid=" + cContent, (error, result, body)=> {
 				let cData = JSON.parse(body);
 				if (cData.status == "success") {
