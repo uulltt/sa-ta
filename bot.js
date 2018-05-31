@@ -97,7 +97,7 @@ const ch = [
 
 
 client.on('message', message => {
-	if (message.content.substring(0, 6) === "!ready"){
+	if (message.content.substring(0, 6) === "!ready" && message.author !== client.user){
 		let role = message.guild.roles.array().filter(function(item) {
 		return item.name === "Looking for Game";	
 		});
