@@ -1,0 +1,13 @@
+{
+  "name": "cop4331group9",
+  "description": "queries",
+  "version": "1.0.0",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "pg": "7.4.3"
+  }
+}
