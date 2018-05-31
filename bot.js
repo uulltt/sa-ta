@@ -121,10 +121,12 @@ client.on('message', message => {
 	
 	if (message.content.startsWith("!stats ")){
 		var level = message.content.substring(7);
+		console.log(encodeURI('http://rightstickstudios.com/wickets/api/v1/stats.php?id=' + level.replace(/ /gm, '')));
 			var request = require('request').defaults({
 encoding: null
 		});
-		request.get(encodeURI(' http://rightstickstudios.com/wickets/api/v1/stats.php?id=' + level.replace(/ /gm, '')), function (err, res, body) {
+		request.get(encodeURI('http://rightstickstudios.com/wickets/api/v1/stats.php?id=' + level.replace(/ /gm, '')), function (err, res, body) {
+		console.log(body)
 		var data = JSON.parse(body.toString()).data;
 		console.log(data);
 		var title = '. ';
