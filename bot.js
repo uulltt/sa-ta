@@ -118,7 +118,9 @@ client.on('message', message => {
 			message.channel.send("Error. There is no \"Looking for Game\" role.");
 		}
 	}
-	
+	if (message.content.startswith("!help")){
+		message.channel.send("!ready - add yourself to \"Looking for Game\"\n!unready - remove yourself from \"Looking for Game\"\n!stats L<number> - get stats for Wonder Wickets Level\n!statsC<number> - get stats for Wonder Wickets Challengoid");
+	}
 	if (message.content.startsWith("!stats ")){
 		var level = message.content.substring(7);
 		console.log(encodeURI('http://rightstickstudios.com/wickets/api/v1/stats.php?id=' + level.replace(/ /gm, '')));
