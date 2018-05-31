@@ -157,6 +157,8 @@ const ch = [
     "Flight to the Finish"
 ];
 
+const request = require("request");
+
 
 client.on('message', message => {
 	if (message.content.substring(0, 6) === "!ready" && message.author !== client.user){
@@ -184,17 +186,17 @@ client.on('message', message => {
 		console.log(message.content);
 	}
 	if (message.content.startsWith("!help")){
-		message.channel.send("!ready - add yourself to \"Looking for Game\"\n!unready - remove yourself from \"Looking for Game\"\n!stats L<number> - get stats for Wonder Wickets Level\n!stats C<number> - get stats for Wonder Wickets Challengoid\n!stats <steam profile url> - gets player stats for the linked Steam profile");
+		message.channel.send("!ready - add yourself to \"Looking for Game\"\n!unready - remove yourself from \"Looking for Game\"\n!stats L<number> - get stats for Wonder Wickets Level\n!stats C<number> - get stats for Wonder Wickets Challengoid\n!stats <steam name or profile url> - get stats for Wonder Wickets player");
 	}
 
 	if (message.content.startsWith("!stats ") == true) {
 		let cContent = message.content.substring(7).trim();
 		if (["L", "C", "W"].includes(cContent[0]) == true) {
 			// Level
-			require("request").get("http://rightstickstudios.com/wickets/api/v1/stats.php?id=" + cContent, (error, result, body)=> {
+			request.get("http://rightstickstudios.com/wickets/api/v1/stats.php?id=" + cContent, (error, result, body)=> {
 				let cData = JSON.parse(body);
 				if (cData.status == "success") {
-					let cEmbed = new Discord.RichEmbed().setTitle("Stats for " + (cContent[0] == "L" ? ln[cContent.substring(1)] : (cContent[0] == "C" ? ch[cContent.substring(1)] : "A Workshop Level")));
+					let cEmbed = new Discord.RichEmbed().setTitle("Stats for " + (cContent[0] == "L" ? ln[cContent.substring(1)] : (cContent[0] == "C" ? ch[cContent.substring(1)] : "a Workshop Level")));
 					for (cKey in cData.data) {
 						cEmbed.addField(rt[cKey].Emoji + " " + rt[cKey].Text, "**" + cData.data[cKey] + "** " + rt[cKey].Type);
 					}
@@ -204,48 +206,49 @@ client.on('message', message => {
 				}
 			});
 		} else {
-			// User
-			/*if (cContent.includes(" L") || cContent.includes(" C") || cContent.includes(" W")){
-				var level = cContent.substring(cContent.indexOf(" ") + 1);
-				console.log("http://rightstickstudios.com/wickets/api/v1/stats.php?uid=" + cContent.substring(0, cContent.indexOf(" ")) + "&id=" + level);
-				require("request").get("http://rightstickstudios.com/wickets/api/v1/stats.php?uid=" + cContent.substring(0, cContent.indexOf(" ")) + "&id=" + level, (error, result, body)=> {
-				
-				let cData = JSON.parse(body.toString());
-				if (cData.status == "success") {
-					let cEmbed = new Discord.RichEmbed().setTitle("Stats for User on" + (cContent[0] == "L" ? ln[cContent.substring(1)] : (cContent[0] == "C" ? ch[cContent.substring(1)] : "A Workshop Level")));
-					for (cKey in cData.data) {
-						cEmbed.addField(rt[cKey].Emoji + " " + rt[cKey].Text, "**" + cData.data[cKey] + "** " + rt[cKey].Type);
-					}
-					message.channel.send(cEmbed);
-				} else {
-					message.channel.send("**Error**: Could not find data for specified Steam ID (*" + cContent + "*)");
-				}
-			});
-			} else {*/
-			require("request").get("http://rightstickstudios.com/wickets/api/v1/stats.php?uid=" + cContent, (error, result, body)=> {
-				let cData = JSON.parse(body);
-				if (cData.status == "success") {
-					let cEmbed = new Discord.RichEmbed().setTitle("Stats for User"), cPlayer = new oPlayer();
-					// Count Stats
-					for (cKey in cData.data) {
-						var i = 0;
-						for (cType in cPlayer) {
-							cPlayer[cType] += (cData.data[cKey] >> i++) & 1;
+			// Get ID
+			let cSteamUser = (cContent.indexOf("/id/") != -1 ? cContent.substring(cContent.indexOf("/id/") + 4) : cContent.substring(cContent.indexOf("/profiles/") + 10));
+			cSteamUser = (cSteamUser == "" ? cContent : cSteamUser);
+			if (cSteamUser != "") {
+				cSteamUser = (cSteamUser[cSteamUser.length - 1] == "/" ? cSteamUser.slice(0, -1) : cSteamUser);
+				request.get("http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=" + process.env.STEAM_API_KEY + "&vanityurl=" + cSteamUser, (error, result, body) => {
+					cSteamUser = (JSON.parse(body).response.success == 1) ? JSON.parse(body).response.steamid : cSteamUser;
+					request.get("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=" + process.env.STEAM_API_KEY + "&steamids=" + cSteamUser, (error, result, body) => {
+						let cSteamPersona = JSON.parse(body).response.players;
+						if (cSteamPersona.length > 0) {
+							cSteamPersona = cSteamPersona[0].personaname;
+							request.get("http://rightstickstudios.com/wickets/api/v1/stats.php?uid=" + cSteamUser, (error, result, body)=> {
+								let cData = JSON.parse(body);
+								if (cData.status == "success") {
+									let cEmbed = new Discord.RichEmbed().setTitle("Stats for " + cSteamPersona), cPlayer = new oPlayer();
+									// Count Stats
+									for (cKey in cData.data) {
+										var i = 0;
+										for (cType in cPlayer) {
+											cPlayer[cType] += (cData.data[cKey] >> i++) & 1;
+										}
+									}
+		
+									// Display Stats
+									for (cKey in cPlayer) {
+										cEmbed.addField(rt[cKey].Emoji + " " + rt[cKey].Text, "**" + cPlayer[cKey] + "** " + rt[cKey].Alternate);
+									}
+		
+									message.channel.send(cEmbed);
+								} else {
+									message.channel.send("**Error**: Could not find data for specified Steam ID (*" + cSteamUser + "*)");
+								}
+							});
+
+						} else {
+							message.channel.send("**Error**: Could not find data for specified Steam user (*" + cContent + "*)");
 						}
-					}
-
-					// Display Stats
-					for (cKey in cPlayer) {
-						cEmbed.addField(rt[cKey].Emoji + " " + rt[cKey].Text, "**" + cPlayer[cKey] + "** " + rt[cKey].Alternate);
-					}
-
-					message.channel.send(cEmbed);
-				} else {
-					message.channel.send("**Error**: Could not find data for specified Steam ID (*" + cContent + "*)");
-				}
-			});
-		//}
-	}
+					});
+				});
+			} else {
+				message.channel.send("**Error**: Could not find data of specified Steam user (*" + cContent + "*)");
+			}
+		}
 	}
 		
 });
