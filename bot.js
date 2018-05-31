@@ -87,7 +87,7 @@ const ch = [
     "Metal Bounce",
     "Beehive Beetdown",
     "Fiery Fury Hurry",
-    "Snow Slider"
+    "Snow Slider",
     "Skipping Stone",
     "My Buggy Buddy",
     "Smashing The Ice",
