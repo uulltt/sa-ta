@@ -209,7 +209,7 @@ client.on('message', message => {
 				var level = cContent.substring(cContent.indexOf(" ") + 1);
 				console.log("http://rightstickstudios.com/wickets/api/v1/stats.php?uid=" + cContent.substring(0, cContent.indexOf(" ")) + "&id=" + level);
 				require("request").get("http://rightstickstudios.com/wickets/api/v1/stats.php?uid=" + cContent.substring(0, cContent.indexOf(" ")) + "&id=" + level, (error, result, body)=> {
-				let cData = JSON.parse(body);
+				let cData = JSON.parse(body.toString());
 				if (cData.status == "success") {
 					let cEmbed = new Discord.RichEmbed().setTitle("Stats for User on" + (cContent[0] == "L" ? ln[cContent.substring(1)] : (cContent[0] == "C" ? ch[cContent.substring(1)] : "A Workshop Level")));
 					for (cKey in cData.data) {
