@@ -136,10 +136,38 @@ encoding: null
 		if (level.toLowerCase().charAt(0) === 'c'){
 			title = ch[parseInt(level.substring(1))];
 		}
+		if (level.toLowerCase().charAt(0) === 'w'){
+			title = "Workshop Level";
+		}
 		const embed = new Discord.RichEmbed().setTitle(title);
 		for (var propName in data) {
 			propValue = data[propName];
-			embed.addField(propName.toString(), propValue.toString());
+			var theName = propName.toString();
+			if (theName === "attempt"){
+				theName = ":starorb: Attempts";
+			}
+			if (theName === "complete"){
+				theName = ":WWThumbsUp: Complete";
+			}
+			if (theName === "quit"){
+				theName = ":WWThumbsDown: Quit";
+			}
+			if (theName === "platinum"){
+				theName = ":wwplatinum: Platinum";
+			}
+			if (theName === "gold"){
+				theName = ":wwgold: Gold";
+			}
+			if (theName === "silver"){
+				theName = ":wwsilver: Silver";
+			}
+			if (theName === "bronze"){
+				theName = ":wwbronze: Bronze";
+			}
+			if (theName === "moon"){
+				theName = ":full_moon: Moon";
+			}
+			embed.addField(theName, propValue.toString());
 		}
 		message.channel.send(embed);
 		});
