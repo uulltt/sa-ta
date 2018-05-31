@@ -205,10 +205,11 @@ client.on('message', message => {
 			});
 		} else {
 			// User
-			if (cContent.includes(" L") || cContent.includes(" C") || cContent.includes(" W")){
+			/*if (cContent.includes(" L") || cContent.includes(" C") || cContent.includes(" W")){
 				var level = cContent.substring(cContent.indexOf(" ") + 1);
 				console.log("http://rightstickstudios.com/wickets/api/v1/stats.php?uid=" + cContent.substring(0, cContent.indexOf(" ")) + "&id=" + level);
 				require("request").get("http://rightstickstudios.com/wickets/api/v1/stats.php?uid=" + cContent.substring(0, cContent.indexOf(" ")) + "&id=" + level, (error, result, body)=> {
+				
 				let cData = JSON.parse(body.toString());
 				if (cData.status == "success") {
 					let cEmbed = new Discord.RichEmbed().setTitle("Stats for User on" + (cContent[0] == "L" ? ln[cContent.substring(1)] : (cContent[0] == "C" ? ch[cContent.substring(1)] : "A Workshop Level")));
@@ -220,7 +221,7 @@ client.on('message', message => {
 					message.channel.send("**Error**: Could not find data for specified Steam ID (*" + cContent + "*)");
 				}
 			});
-			} else {
+			} else {*/
 			require("request").get("http://rightstickstudios.com/wickets/api/v1/stats.php?uid=" + cContent, (error, result, body)=> {
 				let cData = JSON.parse(body);
 				if (cData.status == "success") {
