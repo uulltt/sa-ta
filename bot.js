@@ -10,6 +10,68 @@ client.on('ready', () => {
 	});
 });
 
+function oPlayer() {
+	this.attempt = 0;
+	this.complete = 0;
+	this.quit = 0;
+	this.platinum = 0;
+	this.gold = 0;
+	this.silver = 0;
+	this.bronze = 0;
+	this.moon = 0;
+}
+
+const rt = {
+	"attempt": {
+		Text: "Attempts",
+		Type: "players",
+		Emoji: "<:starorb:294206206929666048>",
+		Alternate: "attempts"
+	},
+	"complete": {
+		Text: "Completions",
+		Type: "players",
+		Emoji: "<:WWThumbsUp:421081106109169674>",
+		Alternate: "completions"
+	},
+	"quit": {
+		Text: "Quitters",
+		Type: "players",
+		Emoji: "<:WWThumbsDown:421081208341004288>",
+		Alternate: "quits"
+	},
+	"platinum": {
+		Text: "Platnium Medals",
+		Type: "medals",
+		Emoji: "<:wwplatinum:320752761476087808>",
+		Alternate: "medals"
+	},
+	"gold": {
+		Text: "Gold Medals",
+		Type: "medals",
+		Emoji: "<:wwgold:320753151470731274>",
+		Alternate: "medals"
+	},
+	"silver": {
+		Text: "Silver Medals",
+		Type: "medals",
+		Emoji: "<:wwsilver:320753229686374400>",
+		Alternate: "medals"
+	},
+	"bronze": {
+		Text: "Bronze Medals",
+		Type: "medals",
+		Emoji: "<:wwbronze:320753268009467914>",
+		Alternate: "medals"
+	},
+	"moon": {
+		Text: "Moon Medals",
+		Type: "medals",
+		Emoji: ":full_moon:",
+		Alternate: "medals"
+	}
+}
+
 const ln = [
     "Let's Make A Comet!",
     "Dwarf Stars",
@@ -124,58 +186,50 @@ client.on('message', message => {
 	if (message.content.startsWith("!help")){
 		message.channel.send("!ready - add yourself to \"Looking for Game\"\n!unready - remove yourself from \"Looking for Game\"\n!stats L<number> - get stats for Wonder Wickets Level\n!stats C<number> - get stats for Wonder Wickets Challengoid");
 	}
-	if (message.content.startsWith("!stats ")){
-		var level = message.content.substring(7);
-			var request = require('request').defaults({
-encoding: null
-		});
-		request.get(encodeURI('http://rightstickstudios.com/wickets/api/v1/stats.php?id=' + level.replace(/ /gm, '')), function (err, res, body) {
-		var data = JSON.parse(body.toString()).data;
-		var title = '. ';
-		if (level.toLowerCase().charAt(0) === 'l'){
-			title = ln[parseInt(level.substring(1))];
+
+	if (message.content.startsWith("!stats ") == true) {
+		let cContent = message.content.substring(7).trim();
+		if (["L", "C", "W"].includes(cContent[0]) == true) {
+			// Level
+			require("request").get("http://rightstickstudios.com/wickets/api/v1/stats.php?id=" + cContent, (error, result, body)=> {
+				let cData = JSON.parse(body);
+				if (cData.status == "success") {
+					let cEmbed = new Discord.RichEmbed().setTitle("Stats for " + (cContent[0] == "L" ? ln[cContent.substring(1)] : (cContent[0] == "C" ? ch[cContent.substring(1)] : "a Workshop Level")));
+					for (cKey in cData.data) {
+						cEmbed.addField(rt[cKey].Emoji + " " + rt[cKey].Text, "**" + cData.data[cKey] + "** " + rt[cKey].Type);
+					}
+					message.channel.send(cEmbed);
+				} else {
+					message.channel.send("**Error**: Could not find data for specified level (*" + cContent + "*)");
+				}
+			});
+		} else {
+			// User
+			require("request").get("http://rightstickstudios.com/wickets/api/v1/stats.php?uid=" + cContent, (error, result, body)=> {
+				let cData = JSON.parse(body);
+				if (cData.status == "success") {
+					let cEmbed = new Discord.RichEmbed().setTitle("Stats for User"), cPlayer = new oPlayer();
+					// Count Stats
+					for (cKey in cData.data) {
+						var i = 0;
+						for (cType in cPlayer) {
+							cPlayer[cType] += (cData.data[cKey] >> i++) & 1;
+						}
+					}
+
+					// Display Stats
+					for (cKey in cPlayer) {
+						cEmbed.addField(rt[cKey].Emoji + " " + rt[cKey].Text, "**" + cPlayer[cKey] + "** " + rt[cKey].Alternate);
+					}
+
+					message.channel.send(cEmbed);
+				} else {
+					message.channel.send("**Error**: Could not find data for specified Steam ID (*" + cContent + "*)");
+				}
+			});
 		}
-		if (level.toLowerCase().charAt(0) === 'c'){
-			title = ch[parseInt(level.substring(1))];
-		}
-		if (level.toLowerCase().charAt(0) === 'w'){
-			title = "Workshop Level";
-		}
-		const embed = new Discord.RichEmbed().setTitle(title);
-		for (var propName in data) {
-			propValue = data[propName];
-			var theName = propName.toString();
-			if (theName === "attempt"){
-				theName = "<:starorb:294206206929666048> Attempts";
-			}
-			if (theName === "complete"){
-				theName = "<:WWThumbsUp:421081106109169674> Complete";
-			}
-			if (theName === "quit"){
-				theName = "<:WWThumbsDown:421081208341004288> Quit";
-			}
-			if (theName === "platinum"){
-				theName = "<:wwplatinum:320752761476087808> Platinum";
-			}
-			if (theName === "gold"){
-				theName = "<:wwgold:320753151470731274> Gold";
-			}
-			if (theName === "silver"){
-				theName = "<:wwsilver:320753229686374400> Silver";
-			}
-			if (theName === "bronze"){
-				theName = "<:wwbronze:320753268009467914> Bronze";
-			}
-			if (theName === "moon"){
-				theName = ":full_moon: Moon";
-			}
-			embed.addField(theName, propValue.toString());
-		}
-		message.channel.send(embed);
-		});
-		
 	}
 		
-	});
+});
 
-	client.login(process.env.BOT_TOKEN);
+client.login(process.env.BOT_TOKEN);
