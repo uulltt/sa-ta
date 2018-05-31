@@ -184,7 +184,7 @@ client.on('message', message => {
 		console.log(message.content);
 	}
 	if (message.content.startsWith("!help")){
-		message.channel.send("!ready - add yourself to \"Looking for Game\"\n!unready - remove yourself from \"Looking for Game\"\n!stats L<number> - get stats for Wonder Wickets Level\n!stats C<number> - get stats for Wonder Wickets Challengoid");
+		message.channel.send("!ready - add yourself to \"Looking for Game\"\n!unready - remove yourself from \"Looking for Game\"\n!stats L<number> - get stats for Wonder Wickets Level\n!stats C<number> - get stats for Wonder Wickets Challengoid\n!stats <steam profile url> - gets player stats for the linked Steam profile");
 	}
 
 	if (message.content.startsWith("!stats ") == true) {
@@ -244,7 +244,7 @@ client.on('message', message => {
 					message.channel.send("**Error**: Could not find data for specified Steam ID (*" + cContent + "*)");
 				}
 			});
-		}
+		//}
 	}
 	}
 		
