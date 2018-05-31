@@ -14,9 +14,10 @@ client.on('ready', () => {
 client.on('message', message => {
 	if (message.content.substring(0, 6) === "!ready"){
 		console.log("AAAAAAAA");
-		let role = message.guild.roles.find("Looking for Game");
-		console.log(role);
-		message.member.addRole(role).then(message.channel.send("Alright <@"+message.author.id+">, you're looking for a game!")).catch(console.error);
+		console.log(message.guild.roles);
+		//let role = message.guild.roles.find("Looking for Game");
+		//console.log(role);
+		//message.member.addRole(role).then(message.channel.send("Alright <@"+message.author.id+">, you're looking for a game!")).catch(console.error);
 		
 	}
 	if (message.content.substring(0, 8) === "!unready"){
