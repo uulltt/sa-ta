@@ -149,25 +149,25 @@ encoding: null
 			propValue = data[propName];
 			var theName = propName.toString();
 			if (theName === "attempt"){
-				theName = ":starorb: Attempts";
+				theName = "<:starorb:294206206929666048> Attempts";
 			}
 			if (theName === "complete"){
-				theName = ":WWThumbsUp: Complete";
+				theName = "<:WWThumbsUp:421081106109169674> Complete";
 			}
 			if (theName === "quit"){
-				theName = ":WWThumbsDown: Quit";
+				theName = "<:WWThumbsDown:421081208341004288> Quit";
 			}
 			if (theName === "platinum"){
-				theName = ":wwplatinum: Platinum";
+				theName = "<:wwplatinum:320752761476087808> Platinum";
 			}
 			if (theName === "gold"){
-				theName = ":wwgold: Gold";
+				theName = "<:wwgold:320753151470731274> Gold";
 			}
 			if (theName === "silver"){
-				theName = ":wwsilver: Silver";
+				theName = "<:wwsilver:320753229686374400> Silver";
 			}
 			if (theName === "bronze"){
-				theName = ":wwbronze: Bronze";
+				theName = "<:wwbronze:320753268009467914> Bronze";
 			}
 			if (theName === "moon"){
 				theName = ":full_moon: Moon";
