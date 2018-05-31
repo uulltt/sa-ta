@@ -13,7 +13,9 @@ client.on('ready', () => {
 
 client.on('message', message => {
 	if (message.cleanContent.startsWith('!ready ')){
+		console.log("AAAAAAAA");
 		var role = message.guild.roles.find("Looking for Game");
+		console.log(role);
 		message.member.addRole(role).then(console.log).catch(console.error);
 	}
 	if (message.cleanContent.startsWith('!unready ')){
