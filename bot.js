@@ -67,7 +67,7 @@ const rt = {
 	"moon": {
 		Text: "Moon Medals",
 		Type: "medals",
-		Emoji: ":full_moon:",
+		Emoji: "<:moonmedal:452882179744202762>",
 		Alternate: "medals"
 	}
 }
