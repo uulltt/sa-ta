@@ -196,7 +196,7 @@ client.on('message', message => {
 			request.get("http://rightstickstudios.com/wickets/api/v1/stats.php?id=" + cContent, (error, result, body)=> {
 				let cData = JSON.parse(body);
 				if (cData.status == "success") {
-					let cEmbed = new Discord.RichEmbed().setTitle("Stats for " + (cContent[0] == "L" ? ln[cContent.substring(1)] : (cContent[0] == "C" ? ch[cContent.substring(1)] : "a Workshop Level"))).setColor(0x5b10a2);
+					let cEmbed = new Discord.RichEmbed().setTitle("Stats for " + (cContent[0] == "L" ? ln[cContent.substring(1)] : (cContent[0] == "C" ? ch[cContent.substring(1)] : "a Workshop Level"))).setColor(0x70a0f0);
 					for (cKey in cData.data) {
 						cEmbed.addField(rt[cKey].Emoji + " " + rt[cKey].Text, "**" + cData.data[cKey] + "** " + rt[cKey].Type);
 					}
@@ -220,7 +220,7 @@ client.on('message', message => {
 							request.get("http://rightstickstudios.com/wickets/api/v1/stats.php?uid=" + cSteamUser, (error, result, body)=> {
 								let cData = JSON.parse(body);
 								if (cData.status == "success") {
-									let cEmbed = new Discord.RichEmbed().setTitle("Stats for " + cSteamPersona).setColor(0x5b10a2), cPlayer = new oPlayer();
+									let cEmbed = new Discord.RichEmbed().setTitle("Stats for " + cSteamPersona).setColor(0x70a0f0), cPlayer = new oPlayer();
 									// Count Stats
 									for (cKey in cData.data) {
 										var i = 0;
