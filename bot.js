@@ -191,9 +191,9 @@ client.on('message', message => {
 
 	if (message.content.startsWith("!stats ") == true) {
 		let cContent = message.content.substring(7).trim();
-		if (["L", "C", "W"].includes(cContent[0]) == true) {
+		if (["L", "C", "W"].includes(cContent[0]) == true && cContent.charAt(1) >= '0' && cContent.charAt(1) <= '9') {
 			// Level
-			request.get("http://rightstickstudios.com/wickets/api/v1/stats.php?id=" + cContent, (error, result, body)=> {
+			request.get("http://rightstickstudios.com/wickets/api/v1/stats.php?id=" + cContent.match(/(L|C|W)[0-9]+/gm)[0], (error, result, body)=> {
 				let cData = JSON.parse(body);
 				if (cData.status == "success") {
 					let cEmbed = new Discord.RichEmbed().setTitle("Stats for " + (cContent[0] == "L" ? ln[cContent.substring(1)] : (cContent[0] == "C" ? ch[cContent.substring(1)] : "a Workshop Level"))).setColor(0x70a0f0);
